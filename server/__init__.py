@@ -5,6 +5,8 @@ import eventlet
 import logging
 import json
 import os
+import gc
+from sys import getsizeof
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from datetime import datetime, timedelta
@@ -44,7 +46,6 @@ ROOMS = {}
 def prune():
     global ROOMS
     """Prune rooms stale for more than 6 hours"""
-    cur_path = os.path.dirname(os.path.abspath(__file__))
     total = 0
     if ROOMS:
         total = len(ROOMS.keys())
@@ -55,18 +56,24 @@ def prune():
                 v.to_json().get('date_modified'),'%Y-%m-%d %H:%M:%S.%f'
             )).total_seconds() >= stale_delta_s]
         if len(stale) > 0:
+            cur_path = os.path.dirname(os.path.abspath(__file__))
             # add playtimes to master playtimes list
-            sorted_rooms = sorted(stale, key=lambda k: k.get('date_modified'))
-            playtimes = [json.dumps([v['date_created'], v['playtime']]) for v in sorted_rooms if v['playtime'] > 10]
             with open(os.path.join(cur_path, 'all-playtimes.txt'), 'a+') as f:
+                playtimes = [json.dumps([v['date_created'], v['playtime']])
+                    for v in sorted(stale, key=lambda k: k.get('date_modified'))
+                    if v['playtime'] > 10]
                 f.write("\r\n".join(playtimes))
+                del playtimes
             # add custom words to master list
-            custom_words = [json.dumps(v['options']['custom']) for v in stale if v['options']['custom'] is not False]
             with open(os.path.join(cur_path, 'all-custom-words.txt'), 'a+') as f:
+                custom_words = [json.dumps(v['options']['custom'])
+                for v in stale if v['options']['custom'] is not False]
                 f.write("\r\n".join(custom_words))
+                del custom_words
             # prune master rooms list
             for game in stale:
                 del ROOMS[game.get('game_id')]
+            gc.collect()
     return jsonify({
         "pruned": total - len(ROOMS.keys())
     })
@@ -79,7 +86,8 @@ def trigger_error():
 def stats():
     """display room stats"""
     resp = {
-        "total": len(ROOMS.keys())
+        "total": len(ROOMS.keys()),
+        "bytes_used": getsizeof(ROOMS)
     }
     if 'rooms' in request.args:
         if ROOMS:
