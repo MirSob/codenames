@@ -190,11 +190,11 @@ export default {
       }
       switch (this.turn) {
         case 'R':
-          return 'Red Team Starts';
+          return 'Czerwony zaczyna';
         case 'G':
-          return 'Green Team Starts';
+          return 'Zielony zaczyna';
         case 'B':
-          return 'Blue Team Starts';
+          return 'Niebieski zaczyna';
         default:
           return '';
       }
