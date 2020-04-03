@@ -14,6 +14,7 @@ DICTIONARIES = {
     "Pop Culture" : FILE_ROOT + "/code_names_pop.txt",
     "Standard" :    FILE_ROOT + "/code_names_dict.txt",
     "Simple" :      FILE_ROOT + "/code_names_simple.txt",
+    "Polski" :      FILE_ROOT + "/code_names_polski.txt",
     "French" :      FILE_ROOT + "/code_names_french.txt",
     "Portuguese" :  FILE_ROOT + "/code_names_portuguese.txt",
     "German" :      FILE_ROOT + "/code_names_german.txt",
