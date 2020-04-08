@@ -37,7 +37,7 @@ BIG_BLACKOUT_SPOTS = [4, 20, 24, 36, 40, 44, 56, 60, 76]
 class Info(object):
     # pylint: disable=too-many-instance-attributes
     """Object for tracking game stats"""
-    def __init__(self, dictionary='Simple', size='normal', teams=2, wordbank=False, mix=False):
+    def __init__(self, dictionary='Polski', size='normal', teams=2, wordbank=False, mix=False):
         self.wordbank = wordbank
         self.game_id = self.generate_room_id()
         self.starting_color = RED

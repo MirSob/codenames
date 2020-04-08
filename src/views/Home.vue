@@ -4,15 +4,15 @@
       <v-avatar tile size="128">
         <img src="@/assets/logo-256x256.png" alt="codenames logo">
       </v-avatar>
-      <h1 class="cn-text">Codewords</h1>
+      <h1 class="cn-text">Tajniacy</h1>
       <v-alert
         :value="false"
         type="warning"
         outline
       >
-        If you experience issues, please try refreshing the page.
+        Jeżeli masz problemy spróbuj odświeżyć stronę klawisz F5.
       </v-alert>
-      <v-btn block color="secondary" large to="create" id="create-btn">Create Game</v-btn>
+      <v-btn block color="secondary" large to="create" id="create-btn">Utwórz grę</v-btn>
       <join-form></join-form>
     </v-flex>
   </v-layout>

@@ -4,7 +4,7 @@
       <v-avatar tile size="128">
         <img src="@/assets/logo-256x256.png" alt="codenames logo">
       </v-avatar>
-      <h1 class="cn-text">Codewords</h1>
+      <h1 class="cn-text">Tajniacy</h1>
       <create-form></create-form>
       <v-btn block color="secondary" large to="home">Back</v-btn>
     </v-flex>

@@ -26,7 +26,7 @@
           {{confirmCard}}
         </v-card-text>
         <v-card-actions>
-          <v-btn block large color="secondary" @click.stop="flipCard">Confirm</v-btn>
+          <v-btn block large color="secondary" @click.stop="flipCard">Zatwierdź</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -36,7 +36,7 @@
       v-model="agentAlert"
     >
       Only the Spymaster can flip cards.
-      <v-btn flat :to="{ name: 'Spymaster', params: { room: room }}">Switch to Spymaster</v-btn>
+      <v-btn flat :to="{ name: 'Spymaster', params: { room: room }}">Przełącz na Spymaster</v-btn>
     </v-snackbar>
   </v-container>
 </template>

@@ -60,17 +60,17 @@
       <v-toolbar-title v-if="isFirstTurn" class="cn-text">{{getTurn}}</v-toolbar-title>
       <!-- Scoreboard -->
       <v-toolbar-title v-else class="cn-text headline" id="scoreboard">
-        <span class="red--text text--darken-1">{{tileCounts.flipped.R}}</span>
+        <span class="red--text text--darken-1">{{tileCounts.total.R - tileCounts.flipped.R}}</span>
         <span style="padding: 0 10px;" v-if="!'G' in tileCounts.flipped">
           <v-avatar size="32">
             <img src="@/assets/logo-64x64.png" alt="codenames logo"/>
           </v-avatar>
         </span>
         <span v-else> - </span>
-        <span class="blue--text text--darken-1">{{tileCounts.flipped.B}}</span>
+        <span class="blue--text text--darken-1">{{tileCounts.total.B - tileCounts.flipped.B}}</span>
         <template v-if="'G' in tileCounts.flipped">
           <span> - </span>
-          <span class="green--text text--lighten-1">{{tileCounts.flipped.G}}</span>
+          <span class="green--text text--lighten-1">{{tileCounts.total.G - tileCounts.flipped.G}}</span>
         </template>
       </v-toolbar-title>
     </v-toolbar>

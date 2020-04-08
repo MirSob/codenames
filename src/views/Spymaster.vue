@@ -2,9 +2,9 @@
   <v-layout align-center justify-center text-xs-center mb-5 v-if="!spymasterReveal">
     <v-flex sm8 xs12>
       <v-alert outline type="warning" :value="true">
-        <b>Warning!</b> There should only be two spymasters per game.
+        <b>Warning!</b>Maksymalnie dwóch SpyMasterów może grać.
       </v-alert>
-      <v-btn block large color="success" @click="reveal_spymaster" id="spymaster-btn">I understand. Make me a spymaster!</v-btn>
+      <v-btn block large color="success" @click="reveal_spymaster" id="spymaster-btn">Rozumiem. Zrób mnie SpyMasterem!</v-btn>
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>

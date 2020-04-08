@@ -19,7 +19,7 @@
         label="Custom Wordbank"
         v-model="rawWordbank"
         :rules="wordbankRules"
-        placeholder="Enter a comma or newline separated list of words."
+        placeholder="Wprowadź listę słów rozdzieloną przecinkami lub nową linią."
       ></v-textarea>
       <v-select
         v-show="!useCustom"
@@ -57,18 +57,18 @@ export default {
   data () {
     return {
       mix: false,
-      selectedDictionaries: 'Simple',
+      selectedDictionaries: 'Polski',
       mixes: {},
       useCustom: false,
       rawWordbank: '',
       wordbankRules: [
-        () => (this.wordbank && this.wordbank.length >= 25) || 'Word bank must contain at least 25 words.',
+        () => (this.wordbank && this.wordbank.length >= 25) || 'Co najmniej 25 słów.',
       ],
     }
   },
   watch: {
     mix (v) {
-      this.selectedDictionaries = v ? [] : 'Simple';
+      this.selectedDictionaries = v ? [] : 'Polski';
     },
     dictionaryOptions: {
       handler: function () { this.$emit('setDictionaryOptions', this.dictionaryOptions) },
