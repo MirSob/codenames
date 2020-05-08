@@ -2,7 +2,7 @@
   <v-layout align-center justify-center text-xs-center mb-5 v-if="!spymasterReveal">
     <v-flex sm8 xs12>
       <v-alert outline type="warning" :value="true">
-        <b>Warning!</b>Maksymalnie dwóch SpyMasterów może grać.
+        <b>Uwaga!</b>Maksymalnie dwóch SpyMasterów może grać.
       </v-alert>
       <v-btn block large color="success" @click="reveal_spymaster" id="spymaster-btn">Rozumiem. Zrób mnie SpyMasterem!</v-btn>
     </v-flex>
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters(['gameWon']),
-    ...mapState(['room', 'username', 'spymasterReveal', 'game', 'connected']),
+    ...mapState(['room', 'username', 'spymasterReveal', 'game', 'connected', 'spy']),
     role() {
       if (!this.spymasterReveal) {
         return null;
@@ -50,28 +50,33 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['set_room', 'set_username', 'reveal_spymaster', 'reset_room']),
+    ...mapMutations(['set_room', 'set_username', 'reveal_spymaster', 'reset_room', 'set_spy']),
     newGame(reset) {
       // reset spymaster state and go to player view
       // emit message to start a new game
       const params = {
         room: this.room,
       };
-      if (reset === true) {
+    // if (reset === true) {
         this.reset_room()
         params['newGame'] = true
         this.$router.push({ path: `/${this.room}/player` })
-      }
+    //}
+      console.log('newGame', params);
       this.$socket.emit('regenerate', params);
     },
   },
   mounted() {
-    if (!this.username) this.set_username('#unknown');
+    if (!this.username) this.set_username('#spy');
     if (!this.room) this.set_room(this.$route.params.room);
+    //this.set_username('spy');
+    this.set_spy(true);
     const params = {
       username: this.username,
       room: this.room,
+      spy: this.spy
     };
+    console.log('mounted', params);
     this.$socket.emit('join', params);
   },
 };

@@ -3,7 +3,7 @@
     <v-card>
       <v-card-text>
         <v-form @submit="joinGame">
-          <v-text-field label="Username" v-model="username" required></v-text-field>
+          <v-text-field label="Username" v-model="username" required @change="chUserName"></v-text-field>
           <v-alert type="error" :value="showInputError" transition="slide-y-reverse-transition">
             ID pokoju wymagane do dołączenia.
           </v-alert>
@@ -36,13 +36,17 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["set_username", "set_room"]),
+    ...mapMutations(["set_username", "set_room", "set_spy"]),
+    chUserName (){
+      this.set_username(this.username);
+    },
     joinGame() {
       this.set_username(this.username);
+      this.set_spy(false);
       this.showInputError = false;
       if (this.room_num) {
         this.set_room(this.room_id);
-        this.$router.push({ name: "Player", params: { room: this.room_id } });
+				this.$router.push({ name: "Player", params: { room: this.room_id, username: this.username, spy:this.spy} });
       } else {
         this.showInputError = true;
       }

@@ -1,5 +1,6 @@
 """Object for tracking game status"""
 from datetime import datetime
+import logging
 import time
 import random
 import math
@@ -44,6 +45,9 @@ class Info(object):
         self.date_created = datetime.now()
         self.date_modified = self.date_created
         self.players = []
+        self.players_no = 0
+        self.spymasters = 0
+        self.newGame = False
         self.size = size
         self.teams = teams
         self.dictionary = dictionary
@@ -72,7 +76,9 @@ class Info(object):
                 "mix": self.mix,
                 "custom": self.wordbank
             },
-
+            "players_no": self.players_no,
+            "spymasters": self.spymasters,
+            "newGame": self.newGame
         }
 
     def generate_board(self, newGame=False):
@@ -85,6 +91,7 @@ class Info(object):
         self.layout = self.__get_layout(self.size, int(self.teams))
         self.board = dict.fromkeys(self.words, False)
         self.solution = dict(zip(self.words, self.layout))
+        self.newGame = True
 
     def flip_card(self, word):
         """Assign color to card in solution dict"""
@@ -94,13 +101,20 @@ class Info(object):
         self.board[word] = self.solution[word]
         return self.solution[word]
 
-    def add_player(self, name):
+    def add_player(self, name, spy):
         """Add playername to player array"""
-        self.players.append(name)
-
-    def remove_player(self, name):
+        logging.warning("Add playername to player array " + name)
+        if name not in self.players:
+            self.players.append(name)
+            self.players_no = self.players_no + 1
+        if spy:
+            self.spymasters = self.spymasters + 1
+    def remove_player(self, name, spy):
         """Remove playername to player array"""
         self.players.remove(name)
+        self.players_no = self.players_no -1
+        if spy:
+            self.spymasters = self.spymasters + 1
 
     @classmethod
     def generate_room_id(cls):

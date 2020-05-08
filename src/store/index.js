@@ -2,8 +2,11 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate'
 import * as Cookies from 'js-cookie'
+import router from '../router/index.js'
+const actions = { goto ({ commit , dispatch}, payload) { router.push({ path: payload.Redirect}) }, }
 
 Vue.use(Vuex);
+
 const inFifteenMinutes = new Date(new Date().getTime() + 15 * 60 * 1000);
 
 export default new Vuex.Store({
@@ -24,7 +27,10 @@ export default new Vuex.Store({
     error: null,
     turn: '',
     spymasterReveal: false,
-    popupHides: 0
+    popupHides: 0,
+    spy: false,
+    spymasters: 0,
+    newGame: false
   },
   getters: {
     words(state) {
@@ -73,25 +79,38 @@ export default new Vuex.Store({
   mutations: {
     SOCKET_CONNECT(state) {
       state.connected = true;
+      //console.log('SOCKET_CONNECT', message);
     },
     SOCKET_DISCONNECT(state) {
       state.connected = false;
+      //console.log('SOCKET_DISCONNECT', message);
     },
     SOCKET_MESSAGE(state, message) {
       state.game = message;
-      state.turn = message.starting_color;
-      state.room = message.game_id;
       state.error = null;
+      state.spymasters = message.spymasters;
+      state.turn = message.starting_color;
+      state.room = message.game_id;  
+      state.newGame = message.newGame;
+      if (message.newGame == true) {
+        //router.push({ path: `/${state.room}/player` })
+        console.log('SOCKET_MESSAGE', `/${state.room}/player`);
+      }
+      console.log('SOCKET_MESSAGE', message);
     },
     SOCKET_JOIN_ROOM(state, message) {
       state.error = null;
       state.room = message.room;
+      state.spymasters = message.spymasters;
+      console.log('SOCKET_JOIN_ROOM', message);
     },
     SOCKET_LIST_DICTIONARIES: (state, message) => {
       state.dictionaries = message.dictionaries;
+      console.log('SOCKET_LIST_DICTIONARIES', message);
     },
     SOCKET_ERROR(state, message) {
       state.error = message.error;
+      //console.log('SOCKET_ERROR', message);
     },
     set_turn(state, team) {
       state.turn = team;
@@ -102,7 +121,11 @@ export default new Vuex.Store({
     set_room(state, room) {
       state.room = room;
     },
+    set_spy(state, spy) {
+      state.spy = spy;
+    },
     set_username(state, username) {
+      console.log('store set_username ' + username);
       state.username = username;
     },
     reset_error(state) {

@@ -47,6 +47,16 @@ export default {
   },
   computed: {
     ...mapState(['room']),
+    username: {
+      get() {
+        console.info('get username ' + this.$store.state.username);
+        return this.$store.state.username;
+      },
+      set(v) {
+        console.info('set username ' + v);
+        return this.$store.commit("set_username", v);
+      }
+    },
   },
   watch: {
     room() {
@@ -60,9 +70,11 @@ export default {
       const params = {
         teams: this.teams,
         size: this.size,
-        dictionaryOptions: this.dictionaryOptions
-      };
-      this.set_username(this.username);
+        dictionaryOptions: this.dictionaryOptions,
+        username: this.username,
+        spy: false
+			};
+			this.set_username(this.$store.state.username);
       if (this.valid) {
         this.$socket.emit('create', params);
       } else {

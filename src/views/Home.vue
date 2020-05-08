@@ -13,7 +13,7 @@
         Jeżeli masz problemy spróbuj odświeżyć stronę klawisz F5.
       </v-alert>
       <v-btn block color="secondary" large to="create" id="create-btn">Utwórz grę</v-btn>
-      <join-form></join-form>
+      <join-form @change="chUserName"></join-form>
     </v-flex>
   </v-layout>
 </template>
@@ -34,7 +34,9 @@ export default {
   },
   methods: {
     ...mapMutations(['reset_error']),
-
+    chUserName(usern) {
+      console.log(usern);
+    }
   },
 };
 </script>

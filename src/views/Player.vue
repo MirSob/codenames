@@ -12,22 +12,25 @@ export default {
     GameBoard,
   },
   computed: {
-    ...mapState(['room', 'username']),
+    ...mapState(['room', 'username', 'spy']),
     role() {
       return this.$route.name;
     },
   },
   mounted() {
-    if (!this.username) this.set_username('#unknown');
+    if (!this.username) this.set_username('#player');
     if (!this.room) this.set_room(this.$route.params.room);
+    this.set_spy(false);
+    //this.set_username('player');
     const params = {
       username: this.username,
       room: this.room,
+      spy: this.spy
     };
     this.$socket.emit('join', params);
   },
   methods: {
-    ...mapMutations(['set_room', 'set_username']),
+    ...mapMutations(['set_room', 'set_username', 'set_spy']),
   },
 };
 </script>

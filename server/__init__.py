@@ -22,6 +22,14 @@ try:
 except (ImportError, ValueError):
     from codenames import game
 
+def printLog(*args, **kwargs):
+    print(*args, **kwargs)
+    with open('output.out','a') as file:
+        print(*args, **kwargs, file=file)
+
+printLog('Codename server start')
+logging.warning('Watch out! Codename server start')  # will print a message to the console
+logging.info('I told you so Codename server start')  # will not print anything
 # init sentry
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -46,6 +54,7 @@ ROOMS = {}
 def prune():
     global ROOMS
     """Prune rooms stale for more than 6 hours"""
+    logging.warning('prune')
     total = 0
     if ROOMS:
         total = len(ROOMS.keys())
@@ -85,6 +94,7 @@ def trigger_error():
 @app.route('/stats')
 def stats():
     """display room stats"""
+    logging.warning('display room stats')
     resp = {
         "total": len(ROOMS.keys()),
         "bytes_used": getsizeof(ROOMS)
@@ -99,7 +109,8 @@ def stats():
 @socketio.on('create')
 def on_create(data):
     """Create a game lobby"""
-    # username = data['username']
+    logging.warning('Create a game lobby')
+    username = data['username']
     # create the game
     # handle custom wordbanks
     global ROOMS
@@ -125,19 +136,25 @@ def on_create(data):
 
     room = gm.game_id
     ROOMS[room] = gm
+    gm.spymasters = 0;
     join_room(room)
-    # rooms[room].add_player(username)
+    ROOMS[room].add_player(username, False)
     emit('join_room', {'room': room})
+    logging.warning('Create Game ' + room)
 
 @socketio.on('join')
 def on_join(data):
     """Join a game lobby"""
-    # username = data['username']
+    logging.warning('Join a game lobby')
+    logging.warning( data)
+    username = data['username']
     room = data['room']
+    spy = data['spy']
     if room in ROOMS:
         # add player and rebroadcast game object
-        # rooms[room].add_player(username)
+        
         join_room(room)
+        ROOMS[room].add_player(username, spy)
         send(ROOMS[room].to_json(), room=room)
     else:
         emit('error', {'error': 'Unable to join room. Room does not exist.'})
@@ -145,16 +162,19 @@ def on_join(data):
 @socketio.on('leave')
 def on_leave(data):
     """Leave the game lobby"""
-    # username = data['username']
+    logging.warning('Leave the game lobby')
+    username = data['username']
     room = data['room']
+    spy = data['spy']
     # add player and rebroadcast game object
-    # rooms[room].remove_player(username)
+    ROOMS[room].remove_player(username,spy)
     leave_room(room)
     send(ROOMS[room].to_json(), room=room)
 
 @socketio.on('flip_card')
 def on_flip_card(data):
     """flip card and rebroadcast game object"""
+    logging.warning('flip card and rebroadcast game object')
     room = data['room']
     card = data['card']
     ROOMS[room].flip_card(card)
@@ -163,13 +183,17 @@ def on_flip_card(data):
 @socketio.on('regenerate')
 def on_regenerate(data):
     """regenerate the words list"""
+    logging.warning('regenerate the words list')
     room = data['room']
     ROOMS[room].generate_board(data.get('newGame', False))
+    ROOMS[room].spymasters = 0;
     send(ROOMS[room].to_json(), room=room)
+    ROOMS[room].newGame = False
 
 @socketio.on('list_dictionaries')
 def list_dictionaries():
     """send a list of dictionary names"""
+    logging.warning('send a list of dictionary names')
     # send dict list to client
     emit('list_dictionaries', {'dictionaries': list(game.DICTIONARIES.keys())})
 
