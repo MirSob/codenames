@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate'
 import * as Cookies from 'js-cookie'
 import router from '../router/index.js'
-const actions = { goto ({ commit , dispatch}, payload) { router.push({ path: payload.Redirect}) }, }
+const actions = { goto({ commit, dispatch }, payload) { router.push({ path: payload.Redirect }) }, }
 
 Vue.use(Vuex);
 
@@ -30,7 +30,9 @@ export default new Vuex.Store({
     popupHides: 0,
     spy: false,
     spymasters: 0,
-    newGame: false
+    newGame: false,
+    players: [],
+    ip: ''
   },
   getters: {
     words(state) {
@@ -87,10 +89,11 @@ export default new Vuex.Store({
     },
     SOCKET_MESSAGE(state, message) {
       state.game = message;
+      state.players = message.players;
       state.error = null;
       state.spymasters = message.spymasters;
       state.turn = message.starting_color;
-      state.room = message.game_id;  
+      state.room = message.game_id;
       state.newGame = message.newGame;
       if (message.newGame == true) {
         //router.push({ path: `/${state.room}/player` })
@@ -140,7 +143,10 @@ export default new Vuex.Store({
       state.spymasterReveal = false;
     },
     incrementPopupHides(state) {
-      state.popupHides++
+      state.popupHides++;
+    },
+    set_ip(state, ip) {
+      state.ip = ip;
     },
   },
 });

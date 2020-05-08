@@ -56,7 +56,7 @@
       };
     },
     mounted() {
-      if (!this.username) this.set_username('#GameBoardPlayer');
+      if (!this.username) this.set_username(this.ip+'GB-player');
       if (!this.room) this.set_room(this.$route.params.room);
       const params = {
         username: this.username,
@@ -76,14 +76,16 @@
       '$store.state.newGame': {
         immediate: true,
         handler () {
-          if (this.$store.state.newGame == true)
-            this.$router.push({path: `/${this.room}/player`})
+          if (this.$store.state.newGame == true){
+            //this.$router.push({path: `/${this.room}/player`})
+            console.log('watch GB newGame');
+          }
         }
       }
  
     },
     computed: {
-      ...mapState(['connected', 'room', 'username', 'game']),
+      ...mapState(['connected', 'room', 'username', 'game', 'spymasters', 'ip']),
       ...mapGetters(['words']),
       cards() {
         if (this.isSpymaster()) {

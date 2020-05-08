@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     ...mapGetters(['gameWon']),
-    ...mapState(['room', 'username', 'spymasterReveal', 'game', 'connected', 'spy']),
+    ...mapState(['room', 'username', 'spymasterReveal', 'game', 'connected', 'spy', 'ip']),
     role() {
       if (!this.spymasterReveal) {
         return null;
@@ -66,8 +66,19 @@ export default {
       this.$socket.emit('regenerate', params);
     },
   },
+  watch: {
+      '$store.state.newGame': {
+        immediate: true,
+        handler () {
+          if (this.$store.state.newGame == true){
+            this.$router.push({path: `/${this.room}/player`})
+            console.log('watch SpM newGame');
+          }
+        }
+      }
+  },
   mounted() {
-    if (!this.username) this.set_username('#spy');
+    if (!this.username) this.set_username(this.ip +'#spy');
     if (!this.room) this.set_room(this.$route.params.room);
     //this.set_username('spy');
     this.set_spy(true);

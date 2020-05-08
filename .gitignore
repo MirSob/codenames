@@ -25,6 +25,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+--.vs
 
 # built files
 server/static
@@ -43,6 +44,9 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 .sln
+.vs/*
+output.out
+codenames.7z
 
 all-*.*
 

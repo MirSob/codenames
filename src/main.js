@@ -6,7 +6,7 @@ import VueSocketio from 'vue-socket.io';
 import Vuetify from 'vuetify';
 import Raivue from 'raivue';
 import Vue from 'vue';
-import { sync } from 'vuex-router-sync'
+import { sync } from 'vuex-router-sync';
 
 import App from './App';
 import router from './router';
@@ -20,7 +20,7 @@ import * as Integrations from '@sentry/integrations';
 if (process.env.VUE_APP_SENTRY_DSN) {
   Sentry.init({
     dsn: process.env.VUE_APP_SENTRY_DSN,
-    integrations: [new Integrations.Vue({Vue, attachProps: true})],
+    integrations: [new Integrations.Vue({ Vue, attachProps: true })],
   });
 }
 
@@ -31,11 +31,12 @@ Vue.use(Raivue);
 Vue.use(VueResizeText)
 Vue.use(VueSocketio, `//${window.location.host}`, store);
 
+
 new Vue({
   router,
   store,
   render: h => h(App),
-  beforeCreate () {
+  beforeCreate() {
     // before creating vue app, check if current path doesn't match stored path
     // check if store contains a route first
     if (this.$store.state.route && (this.$route.path !== this.$store.state.route.path)) {

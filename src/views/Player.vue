@@ -12,13 +12,13 @@ export default {
     GameBoard,
   },
   computed: {
-    ...mapState(['room', 'username', 'spy']),
+    ...mapState(['room', 'username', 'spy', 'ip']),
     role() {
       return this.$route.name;
     },
   },
   mounted() {
-    if (!this.username) this.set_username('#player');
+    if (!this.username) this.set_username(this.ip +'#player');
     if (!this.room) this.set_room(this.$route.params.room);
     this.set_spy(false);
     //this.set_username('player');

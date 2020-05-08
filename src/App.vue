@@ -48,6 +48,13 @@
           </v-list-tile>
         <v-divider></v-divider>
       </v-list>
+      {{spymasters}}
+      <v-divider></v-divider>
+      <ul class='plylist'>
+        <li v-for="ply in players">
+        {{ ply }}
+        </li>
+      </ul>
     </v-navigation-drawer>
 
     <v-toolbar
@@ -114,6 +121,7 @@
 import { mapGetters, mapState, mapMutations } from 'vuex';
 import ApplePopup from '@/components/ApplePopup'
 
+
 export default {
   name: 'app',
   components: { ApplePopup },
@@ -153,7 +161,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['connected', 'room', 'error', 'game', 'turn']),
+    ...mapState(['connected', 'room', 'error', 'game', 'turn','spymasters', 'players', 'ip']),
     ...mapGetters(['gameWon', 'tileCounts']),
     isFirstTurn() {
       if (!this.connected) {
@@ -202,9 +210,15 @@ export default {
   },
   mounted() {
     this.$socket.emit('list_dictionaries');
+    fetch('https://api.ipify.org?format=json')
+      .then(x => x.json())
+      .then(({ ip }) => {
+      this.set_ip(ip);
+      console.log('IP = ', ip);
+      });
   },
   methods: {
-    ...mapMutations(['set_turn']),
+    ...mapMutations(['set_turn', 'set_ip']),
   },
 };
 </script>

@@ -3,7 +3,13 @@
     <v-card>
       <v-card-text>
         <v-form @submit="joinGame">
-          <v-text-field label="Username" v-model="username" required @change="chUserName"></v-text-field>
+          <v-text-field 
+          label="Username" 
+          v-model="username" 
+          :rules="[v => !!v || 'Podaj Swoje imię']"
+          required 
+          @change="chUserName">
+          </v-text-field>
           <v-alert type="error" :value="showInputError" transition="slide-y-reverse-transition">
             ID pokoju wymagane do dołączenia.
           </v-alert>

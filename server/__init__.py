@@ -156,6 +156,7 @@ def on_join(data):
         join_room(room)
         ROOMS[room].add_player(username, spy)
         send(ROOMS[room].to_json(), room=room)
+        ROOMS[room].newGame = False        
     else:
         emit('error', {'error': 'Unable to join room. Room does not exist.'})
 
@@ -166,10 +167,11 @@ def on_leave(data):
     username = data['username']
     room = data['room']
     spy = data['spy']
-    # add player and rebroadcast game object
+    # remove player and rebroadcast game object
     ROOMS[room].remove_player(username,spy)
     leave_room(room)
     send(ROOMS[room].to_json(), room=room)
+    ROOMS[room].newGame = False        
 
 @socketio.on('flip_card')
 def on_flip_card(data):
@@ -179,6 +181,7 @@ def on_flip_card(data):
     card = data['card']
     ROOMS[room].flip_card(card)
     send(ROOMS[room].to_json(), room=room)
+    ROOMS[room].newGame = False        
 
 @socketio.on('regenerate')
 def on_regenerate(data):
